@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    name: {{ user_profile.username }}
+    <br>
+    followers: {{ user_profile.follower_count }}
+    <br>
+    following: {{ user_profile.following_count }}
+    <br>
+    all posts
+
+    {% for post in all_posts %}
+        <div class="product-container container-fluid card my-3">
+            <h2>{{ post.username }}</h2>
+            <p>{{ post.post_content }}</p>
+            <p>{{ post.creation_time }}</p>
+            <p>{{ post.likes }}</p>
+        </div>
+    {% endfor %}
+
+{% endblock %}

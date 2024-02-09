@@ -9,8 +9,10 @@
   <hr>
   All posts
   {% for post in all_posts %}
-    <div class="product-container container-fluid card">
-      <h2>{{ post.username}}</h2>
+    <div class="product-container container-fluid card my-3">
+      <a href="{% url 'profile' post.username %}">
+        <h2>{{ post.username }}</h2>
+      </a>
       <p>{{ post.post_content }}</p>
       <p>{{ post.creation_time }}</p>
       <p>{{ post.likes }}</p>

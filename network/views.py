@@ -56,6 +56,11 @@ def new_post(request):
 
     return redirect('index')
 
+def profile_view(request, name):
+    return render(request, "network/profile.html", {
+        "user_profile": User.objects.get(username=name),
+        "all_posts": User.objects.get(username=name).all_posts.all()
+    })
 
 def register(request):
     if request.method == "POST":
