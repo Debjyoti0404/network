@@ -11,10 +11,21 @@ from .forms import *
 @login_required
 def follow_request(request, name):
     user_to_follow = User.objects.get(username=name)
-    try:
-        print(user_to_follow.follower_list.all())
-    except ValueError:
-        print(ValueError+"lol")
+    user_goingto_follow = User.objects.get(username=request.user.username)
+    if user_goingto_follow in user_to_follow.follower_list.all():
+        user_to_follow.follower_list.remove(user_goingto_follow)
+        user_to_follow.follower_count -= 1
+        user_to_follow.save()
+        user_goingto_follow.following_list.remove(user_to_follow)
+        user_goingto_follow.following_count -= 1
+        user_goingto_follow.save()
+    else:
+        user_to_follow.follower_list.add(user_goingto_follow)
+        user_to_follow.follower_count += 1
+        user_to_follow.save()
+        user_goingto_follow.following_list.add(user_to_follow)
+        user_goingto_follow.following_count += 1
+        user_goingto_follow.save()
 
     return redirect('profile', name)
 
