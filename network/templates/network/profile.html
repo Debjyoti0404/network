@@ -8,6 +8,12 @@
     <br>
     following: {{ user_profile.following_count }}
     <br>
+    {% if user.is_authenticated and user.username != user_profile.username %}
+        <a href="{% url 'followrequest' user_profile.username %}">
+            <button>Follow</button>
+        </a>
+        <br>
+    {% endif %}
     all posts
 
     {% for post in all_posts %}

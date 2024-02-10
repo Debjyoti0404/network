@@ -8,6 +8,15 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 
+@login_required
+def follow_request(request, name):
+    user_to_follow = User.objects.get(username=name)
+    try:
+        print(user_to_follow.follower_list.all())
+    except ValueError:
+        print(ValueError+"lol")
+
+    return redirect('profile', name)
 
 def index(request):
     post_form = PostForm()
