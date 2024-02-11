@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -12,20 +13,25 @@ from .forms import *
 def follow_request(request, name):
     user_to_follow = User.objects.get(username=name)
     user_goingto_follow = User.objects.get(username=request.user.username)
+    #check whether the current user already follows the visited profile
     if user_goingto_follow in user_to_follow.follower_list.all():
         user_to_follow.follower_list.remove(user_goingto_follow)
-        user_to_follow.follower_count -= 1
+        user_to_follow.follower_count = F("follower_count") - 1
         user_to_follow.save()
+        user_to_follow.refresh_from_db()
         user_goingto_follow.following_list.remove(user_to_follow)
-        user_goingto_follow.following_count -= 1
+        user_goingto_follow.following_count = F("following_count") - 1
         user_goingto_follow.save()
+        user_goingto_follow.refresh_from_db()
     else:
         user_to_follow.follower_list.add(user_goingto_follow)
-        user_to_follow.follower_count += 1
+        user_to_follow.follower_count = F("follower_count") + 1
         user_to_follow.save()
-        user_goingto_follow.following_list.add(user_to_follow)
-        user_goingto_follow.following_count += 1
         user_goingto_follow.save()
+        user_goingto_follow.following_list.add(user_to_follow)
+        user_goingto_follow.following_count = F("following_count") + 1
+        user_goingto_follow.save()
+        user_goingto_follow.refresh_from_db()
 
     return redirect('profile', name)
 
@@ -76,11 +82,18 @@ def new_post(request):
 
     return redirect('index')
 
+
+@login_required
+def post_comment(request):
+    pass
+
+
 def profile_view(request, name):
     return render(request, "network/profile.html", {
         "user_profile": User.objects.get(username=name),
         "all_posts": User.objects.get(username=name).all_posts.all()
     })
+
 
 def register(request):
     if request.method == "POST":
