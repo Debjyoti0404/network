@@ -40,7 +40,9 @@ def index(request):
     all_posts = Posts.objects.all()
     return render(request, "network/index.html", {
         "post_form": post_form,
-        "all_posts": all_posts
+        "comment_form": CommentForm(),
+        "all_posts": all_posts,
+        "all_comments": Comments.objects.all()
     })
 
 
@@ -84,8 +86,18 @@ def new_post(request):
 
 
 @login_required
-def post_comment(request):
-    pass
+def post_comment(request, post_id):
+    if request.method == "POST":
+        form_content = CommentForm(request.POST)
+        if form_content.is_valid():
+            content = form_content.cleaned_data['comment_content']
+            author = User.objects.get(username=request.user.username)
+            targetted_post = Posts.objects.get(id=post_id)
+
+            new_comment = Comments.objects.create(username=author, related_post=targetted_post, content=content)
+            new_comment.save()
+
+    return redirect('index')
 
 
 def profile_view(request, name):
