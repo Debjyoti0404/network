@@ -5,9 +5,30 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .models import *
 from .forms import *
+
+@login_required
+def following_posts(request):
+    following_accounts = request.user.following_list.all()
+    all_posts = []
+    for account in following_accounts:
+        for post in Posts.objects.filter(username=account):
+            all_posts.append(post)
+            
+    paginator = Paginator(all_posts, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "network/index.html", {
+        "post_form": None,
+        "comment_form": CommentForm(),
+        "all_posts": page_obj,
+        "all_comments": Comments.objects.all()
+    })
+
 
 @login_required
 def follow_request(request, name):
@@ -36,12 +57,15 @@ def follow_request(request, name):
     return redirect('profile', name)
 
 def index(request):
-    post_form = PostForm()
-    all_posts = Posts.objects.all()
+    posts = Posts.objects.all().order_by('creation_time')
+    paginator = Paginator(posts, 2)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "post_form": post_form,
+        "post_form": PostForm(),
         "comment_form": CommentForm(),
-        "all_posts": all_posts,
+        "all_posts": page_obj,
         "all_comments": Comments.objects.all()
     })
 

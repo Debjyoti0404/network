@@ -1,11 +1,13 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-  <form action="{% url 'newpost' %}" method="post">
-    {% csrf_token %}
-    {{ post_form }}
-    <input type="submit" value="Submit">
-  </form>
+  {% if post_form is not None %}
+    <form action="{% url 'newpost' %}" method="post">
+      {% csrf_token %}
+      {{ post_form }}
+      <input type="submit" value="Submit">
+    </form>
+  {% endif %}
   <hr>
   All posts
   {% for post in all_posts %}
@@ -17,15 +19,36 @@
       <p>{{ post.creation_time }}</p>
       <p>{{ post.likes }}</p>
       <p>comment</p>
-      <form action="{% url 'postcomment' post.id %}">
+      <form action="{% url 'postcomment' post.id %}" method="post">
         {% csrf_token %}
         {{ comment_form }}
         <input type="submit" value="Submit">
       </form>
       {% for comment in all_comments %}
-        <h4>{{ comment.username }}</h4>
-        <p>{{ comment.content }}</p>
+        <div>
+          {% if comment.related_post == post %}
+            <h4>{{ comment.username }}</h4>
+            <p>{{ comment.content }}</p>
+          {% endif %}
+        </div>
       {% endfor %}
     </div>
   {% endfor %}
+  <div class="pagination">
+    <span class="step-links">
+        {% if all_posts.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ all_posts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}
+        </span>
+
+        {% if all_posts.has_next %}
+            <a href="?page={{ all_posts.next_page_number }}">next</a>
+            <a href="?page={{ all_posts.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
 {% endblock %}
