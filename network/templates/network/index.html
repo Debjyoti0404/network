@@ -1,54 +1,57 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
   {% if post_form is not None %}
-    <form action="{% url 'newpost' %}" method="post">
+    <form id="new-post" action="{% url 'newpost' %}" method="post">
       {% csrf_token %}
       {{ post_form }}
       <input type="submit" value="Submit">
     </form>
   {% endif %}
   <hr>
-  All posts
+  <div>All posts </div>
   {% for post in all_posts %}
     <div class="product-container container-fluid card my-3">
       <a href="{% url 'profile' post.username %}">
         <h2>{{ post.username }}</h2>
       </a>
-      <p>{{ post.post_content }}</p>
+      <p id="post-{{post.id}}">{{ post.post_content }}</p>
       <p>{{ post.creation_time }}</p>
       <p>{{ post.likes }}</p>
+      <button class="like" id="like-{{post.id}}" onclick="load_comments(id)">like here</button>
       <p>comment</p>
-      <form action="{% url 'postcomment' post.id %}" method="post">
-        {% csrf_token %}
-        {{ comment_form }}
+      <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
+        <input type="text" id="commentcontent-{{post.id}}" required>
         <input type="submit" value="Submit">
       </form>
-      {% for comment in all_comments %}
-        <div>
-          {% if comment.related_post == post %}
-            <h4>{{ comment.username }}</h4>
-            <p>{{ comment.content }}</p>
-          {% endif %}
-        </div>
-      {% endfor %}
+      <div id="comment-{{post.id}}">
+      </div>
     </div>
   {% endfor %}
-  <div class="pagination">
-    <span class="step-links">
-        {% if all_posts.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ all_posts.previous_page_number }}">previous</a>
-        {% endif %}
+  <ul class="pagination px-5" style="width: 100%;">
+    {% if all_posts.has_previous %}
+      <li class="page-item">
+        <a href="?page=1" class="page-link">&laquo; first</a>
+      </li>
+      <li class="page-item">
+        <a href="?page={{ all_posts.previous_page_number }}" class="page-link">previous</a>
+      </li>
+    {% endif %}
+    <li class="page-item">
+        <p class="page-link fw-bold">Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}</p>
+    </li>
+    {% if all_posts.has_next %}
+      <li class="page-item">
+        <a href="?page={{ all_posts.next_page_number }}" class="page-link">next</a>
+      </li>
+      <li class="page-item">
+        <a href="?page={{ all_posts.paginator.num_pages }}" class="page-link">last &raquo;</a>
+      </li>
+    {% endif %}
+  </ul>
+{% endblock %}
 
-        <span class="current">
-            Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}
-        </span>
-
-        {% if all_posts.has_next %}
-            <a href="?page={{ all_posts.next_page_number }}">next</a>
-            <a href="?page={{ all_posts.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-  </div>
+{% block script %}
+  <script src="{% static 'network/index.js' %}"></script>
 {% endblock %}

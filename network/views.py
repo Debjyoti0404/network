@@ -2,13 +2,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 from .models import *
 from .forms import *
+
+@login_required
+def edit_post(request):
+    pass
 
 @login_required
 def following_posts(request):
@@ -24,7 +31,6 @@ def following_posts(request):
 
     return render(request, "network/index.html", {
         "post_form": None,
-        "comment_form": CommentForm(),
         "all_posts": page_obj,
         "all_comments": Comments.objects.all()
     })
@@ -57,18 +63,20 @@ def follow_request(request, name):
     return redirect('profile', name)
 
 def index(request):
-    posts = Posts.objects.all().order_by('creation_time')
+    posts = Posts.objects.all().order_by('-creation_time')
     paginator = Paginator(posts, 2)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
         "post_form": PostForm(),
-        "comment_form": CommentForm(),
         "all_posts": page_obj,
         "all_comments": Comments.objects.all()
     })
 
+@login_required
+def like_post(request):
+    pass
 
 def login_view(request):
     if request.method == "POST":
@@ -110,16 +118,24 @@ def new_post(request):
 
 
 @login_required
-def post_comment(request, post_id):
+def comment(request, post_id):
+    targetted_post = Posts.objects.get(id=post_id)
     if request.method == "POST":
-        form_content = CommentForm(request.POST)
-        if form_content.is_valid():
-            content = form_content.cleaned_data['comment_content']
-            author = User.objects.get(username=request.user.username)
-            targetted_post = Posts.objects.get(id=post_id)
+        form_content = json.loads(request.body)
+        content = form_content.get('comment_content')
+        author = User.objects.get(username=request.user.username)
+        new_comment = Comments.objects.create(username=author, related_post=targetted_post, content=content)
+        new_comment.save()
 
-            new_comment = Comments.objects.create(username=author, related_post=targetted_post, content=content)
-            new_comment.save()
+        return JsonResponse({"message": "Comment saved successfully."}, status=201)
+            
+    if request.method == "GET":
+        all_comments = Comments.objects.filter(related_post=targetted_post)
+        return JsonResponse({"message": "Email sent successfully."}, status=201)
+        
+
+    if request.method == "GET":
+        all_comments = Comments.objects.filter(related_post=targetted_post)
 
     return redirect('index')
 

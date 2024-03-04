@@ -7,6 +7,7 @@ class User(AbstractUser, models.Model):
     following_count = models.IntegerField(default=0)
     follower_list = models.ManyToManyField('User', blank=True, related_name='followers')
     following_list = models.ManyToManyField('User', blank=True, related_name='following')
+    liked_posts = models.ForeignKey('Posts', null=True, on_delete=models.CASCADE)
 
 class Posts(models.Model):
     username = models.ForeignKey('User', null=True, on_delete=models.SET_NULL, related_name='all_posts')
