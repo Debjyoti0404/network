@@ -19,3 +19,9 @@ class Comments(models.Model):
     username = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     related_post = models.ForeignKey('Posts', on_delete=models.CASCADE, related_name='all_comments')
     content = models.CharField(max_length=1000)
+
+    def serialize(self):
+        return {
+            "author": self.username.username,
+            "content": self.content
+        }

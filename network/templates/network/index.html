@@ -19,12 +19,13 @@
       <p id="post-{{post.id}}">{{ post.post_content }}</p>
       <p>{{ post.creation_time }}</p>
       <p>{{ post.likes }}</p>
-      <button class="like" id="like-{{post.id}}" onclick="load_comments(id)">like here</button>
+      <button class="like" id="like-{{post.id}}" onclick="like_post(id)">like here</button>
       <p>comment</p>
       <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
         <input type="text" id="commentcontent-{{post.id}}" required>
         <input type="submit" value="Submit">
       </form>
+      <p id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</p>
       <div id="comment-{{post.id}}">
       </div>
     </div>

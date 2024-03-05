@@ -131,7 +131,7 @@ def comment(request, post_id):
             
     if request.method == "GET":
         all_comments = Comments.objects.filter(related_post=targetted_post)
-        return JsonResponse({"message": "Email sent successfully."}, status=201)
+        return JsonResponse([comment.serialize() for comment in all_comments], safe=False)
         
 
     if request.method == "GET":
