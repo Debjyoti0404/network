@@ -3,6 +3,7 @@
 
 {% block body %}
   {% if post_form is not None %}
+  <h4>New Post</h4>
     <form id="new-post" action="{% url 'newpost' %}" method="post">
       {% csrf_token %}
       {{ post_form }}
@@ -10,18 +11,21 @@
     </form>
   {% endif %}
   <hr>
-  <div>All posts </div>
+  <h3>All posts </h3>
   {% for post in all_posts %}
     <div class="product-container container-fluid card my-3">
       <a href="{% url 'profile' post.username %}">
         <h2>{{ post.username }}</h2>
       </a>
-      <p id="post-{{post.id}}">{{ post.post_content }}</p>
+      <div id="post-{{post.id}}">{{ post.post_content }}</div>
+      {% if post.username == user %}
+        <button id="editpost-{{post.id}}" onclick="edit_post(id)">edit post</button>
+      {% endif %}
       <p>{{ post.creation_time }}</p>
       <p>{{ post.likes }}</p>
       <button class="like" id="like-{{post.id}}" onclick="like_post(id)">like here</button>
       <p>comment</p>
-      <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
+      <form id="postcomment-{{post.id}}" onsubmit="post_comment(id)">
         <input type="text" id="commentcontent-{{post.id}}" required>
         <input type="submit" value="Submit">
       </form>

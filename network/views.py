@@ -1,21 +1,33 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
-from django.views.decorators.csrf import csrf_exempt
 import json
 
 from .models import *
 from .forms import *
 
 @login_required
-def edit_post(request):
-    pass
+def edit_post(request, post_id):
+    if request.method == "POST":
+        target_post = Posts.objects.get(id=post_id)
+        if target_post.username != request.user:
+            return JsonResponse({"msg": "you are not authorized to edit this post"}, status=403)
+        form_content = json.loads(request.body)
+        content = form_content.get('post_content')
+        target_post.post_content = content
+        target_post.save()
+        return JsonResponse({"msg": "operation successful"}, status=200)
+    
+    if request.method == "GET":
+        target_post = Posts.objects.get(id=post_id)
+        return JsonResponse({"content": target_post.post_content}, status=200)
+
 
 @login_required
 def following_posts(request):
