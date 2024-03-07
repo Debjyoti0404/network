@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-  {% if post_form is not None %}
+  {% if post_form is not None and user.is_authenticated %}
   <h4>New Post</h4>
     <form id="new-post" action="{% url 'newpost' %}" method="post">
       {% csrf_token %}
@@ -22,14 +22,22 @@
         <button id="editpost-{{post.id}}" onclick="edit_post(id)">edit post</button>
       {% endif %}
       <p>{{ post.creation_time }}</p>
-      <p>{{ post.likes }}</p>
-      <button class="like" id="like-{{post.id}}" onclick="like_post(id)">like here</button>
-      <p>comment</p>
-      <form id="postcomment-{{post.id}}" onsubmit="post_comment(id)">
-        <input type="text" id="commentcontent-{{post.id}}" required>
-        <input type="submit" value="Submit">
-      </form>
-      <p id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</p>
+      <p id="likecount-{{post.id}}">{{ post.likes }}</p>
+      {% if user.is_authenticated %}
+        <button id="like-{{post.id}}" onclick="like_post(id)">
+          {% if user in post.liked_by.all %}
+            remove like
+          {% else %}
+            like
+          {% endif %}
+        </button>
+        <p>comment here</p>
+        <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
+          <input type="text" id="commentcontent-{{post.id}}" required>
+          <input type="submit" value="Submit">
+        </form>
+      {% endif %}
+      <div id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</div>
       <div id="comment-{{post.id}}">
       </div>
     </div>

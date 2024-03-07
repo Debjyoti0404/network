@@ -36,10 +36,10 @@ function edit_post(id) {
         });
     });
 }
-function post_comment(id) {
+function post_comment(e, id) {
     e.preventDefault();
     let post_id = id.split('-').pop();
-    let path = '/comment/';
+    let path = '/postcomment/';
     path = path.concat(post_id);
     fetch(path, {
         method: 'POST',
@@ -58,13 +58,24 @@ function post_comment(id) {
 }
 
 function like_post(id) {
-    let post_id = id.split('-').pop()
-    document.querySelector('#post-'+post_id).innerHTML = "fuck you";
+    let post_id = id.split('-').pop();
+    let path = '/like/';
+    path = path.concat(post_id);
+    fetch(path, {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        mode: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.querySelector('#'+id).innerHTML = result.btn_status;
+        document.querySelector('#likecount-'+post_id).innerHTML = result.like_count;
+    })
 }
 
 function load_comments(id) {
     let post_id = id.split('-').pop();
-    let path = '/comment/';
+    let path = '/getcomment/';
     path = path.concat(post_id);
     fetch(path)
     .then(response => response.json())

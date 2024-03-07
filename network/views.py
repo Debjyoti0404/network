@@ -87,8 +87,29 @@ def index(request):
     })
 
 @login_required
-def like_post(request):
-    pass
+def like_post(request, post_id):
+    if request.method != "POST":
+        return JsonResponse({"msg": "request method not allowed"}, status=403)
+    target_post = Posts.objects.get(id=post_id)
+    if request.user in target_post.liked_by.all():
+        target_post.liked_by.remove(request.user)
+        target_post.likes = F("likes") - 1
+        target_post.save()
+        target_post.refresh_from_db()
+        return JsonResponse({
+            "btn_status": "like",
+            "like_count": target_post.likes
+            }, status=200)
+    else:
+        target_post.liked_by.add(request.user)
+        target_post.likes = F("likes") + 1
+        target_post.save()
+        target_post.refresh_from_db()
+        return JsonResponse({
+            "btn_status": "remove like",
+            "like_count": target_post.likes
+            }, status=200)
+    
 
 def login_view(request):
     if request.method == "POST":
@@ -130,26 +151,22 @@ def new_post(request):
 
 
 @login_required
-def comment(request, post_id):
-    targetted_post = Posts.objects.get(id=post_id)
+def postcomment(request, post_id):
     if request.method == "POST":
+        targetted_post = Posts.objects.get(id=post_id)
         form_content = json.loads(request.body)
         content = form_content.get('comment_content')
         author = User.objects.get(username=request.user.username)
         new_comment = Comments.objects.create(username=author, related_post=targetted_post, content=content)
         new_comment.save()
-
         return JsonResponse({"message": "Comment saved successfully."}, status=201)
-            
+ 
+
+def getcomment(request, post_id):
     if request.method == "GET":
+        targetted_post = Posts.objects.get(id=post_id)
         all_comments = Comments.objects.filter(related_post=targetted_post)
         return JsonResponse([comment.serialize() for comment in all_comments], safe=False)
-        
-
-    if request.method == "GET":
-        all_comments = Comments.objects.filter(related_post=targetted_post)
-
-    return redirect('index')
 
 
 def profile_view(request, name):
