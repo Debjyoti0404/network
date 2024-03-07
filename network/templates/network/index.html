@@ -13,16 +13,16 @@
   <hr>
   <h3>All posts </h3>
   {% for post in all_posts %}
-    <div class="product-container container-fluid card my-3">
-      <a href="{% url 'profile' post.username %}">
-        <h2>{{ post.username }}</h2>
+    <div class="product-container container-fluid card my-3 border border-info" style="width: 30rem;">
+      <a class="text-decoration-none" href="{% url 'profile' post.username %}">
+        <h4 class="fw-bold">{{ post.username }}</h4>
       </a>
-      <div id="post-{{post.id}}">{{ post.post_content }}</div>
+      <h5 id="post-{{post.id}}">{{ post.post_content }}</h5>
       {% if post.username == user %}
         <button id="editpost-{{post.id}}" onclick="edit_post(id)">edit post</button>
       {% endif %}
-      <p>{{ post.creation_time }}</p>
-      <p id="likecount-{{post.id}}">{{ post.likes }}</p>
+      <h6 class="card-subtitle my-2 text-muted">{{ post.creation_time }}</h6>
+      <p id="likecount-{{post.id}}">{{ post.likes }} likes</p>
       {% if user.is_authenticated %}
         <button id="like-{{post.id}}" onclick="like_post(id)">
           {% if user in post.liked_by.all %}
@@ -31,14 +31,13 @@
             like
           {% endif %}
         </button>
-        <p>comment here</p>
         <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
-          <input type="text" id="commentcontent-{{post.id}}" required>
+          <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
           <input type="submit" value="Submit">
         </form>
       {% endif %}
-      <div id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</div>
-      <div id="comment-{{post.id}}">
+      <button id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</button>
+      <div id="comment-{{post.id}}" style="display: none;">
       </div>
     </div>
   {% endfor %}

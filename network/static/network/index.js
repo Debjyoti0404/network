@@ -69,7 +69,7 @@ function like_post(id) {
     .then(response => response.json())
     .then(result => {
         document.querySelector('#'+id).innerHTML = result.btn_status;
-        document.querySelector('#likecount-'+post_id).innerHTML = result.like_count;
+        document.querySelector('#likecount-'+post_id).innerHTML = result.like_count + ' likes';
     })
 }
 
@@ -89,9 +89,18 @@ function load_comments(id) {
             comment_content.innerHTML = comment.content;
             element_div.appendChild(author);
             element_div.appendChild(comment_content);
-            document.querySelector('#comment-'+post_id).append(element_div);
+            target_element = document.querySelector('#comment-'+post_id);
+            target_element.append(element_div);
         });
-    })
+    });
+    if (document.querySelector('#comment-'+post_id).style.display == 'block') {
+        document.querySelector('#comment-'+post_id).style.display = 'none';
+        document.querySelector('#loadcomment-'+post_id).innerHTML = 'show comments';
+    }
+    else {
+        document.querySelector('#comment-'+post_id).style.display = 'block';
+        document.querySelector('#loadcomment-'+post_id).innerHTML = 'hide comments';
+    }
 }
 
 function getCookie(name) {

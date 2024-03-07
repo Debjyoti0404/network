@@ -170,9 +170,13 @@ def getcomment(request, post_id):
 
 
 def profile_view(request, name):
+    all_posts = User.objects.get(username=name).all_posts.all().order_by('-creation_time')
+    paginator = Paginator(all_posts, 2)
+    pg_number = request.GET.get("page")
+    pg_obj = paginator.get_page(pg_number)
     return render(request, "network/profile.html", {
         "user_profile": User.objects.get(username=name),
-        "all_posts": User.objects.get(username=name).all_posts.all()
+        "all_posts": pg_obj
     })
 
 
