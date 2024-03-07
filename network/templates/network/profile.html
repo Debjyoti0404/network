@@ -1,7 +1,6 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 {% block body %}
-
     name: {{ user_profile.username }}
     <br>
     followers: {{ user_profile.follower_count }}
@@ -10,19 +9,71 @@
     <br>
     {% if user.is_authenticated and user.username != user_profile.username %}
         <a href="{% url 'followrequest' user_profile.username %}">
-            <button>Follow</button>
+            <button>
+                {% if user in user_profile.follower_list.all %}
+                    Unfollow
+                {% else %}
+                    Follow
+                {% endif %}
+            </button>
         </a>
         <br>
     {% endif %}
     all posts
 
+    <h3>All posts </h3>
     {% for post in all_posts %}
-        <div class="product-container container-fluid card my-3">
-            <h2>{{ post.username }}</h2>
-            <p>{{ post.post_content }}</p>
-            <p>{{ post.creation_time }}</p>
-            <p>{{ post.likes }}</p>
+        <div class="product-container container-fluid card my-3 border border-info" style="width: 30rem;">
+        <a class="text-decoration-none" href="{% url 'profile' post.username %}">
+            <h4 class="fw-bold">{{ post.username }}</h4>
+        </a>
+        <h5 id="post-{{post.id}}">{{ post.post_content }}</h5>
+        {% if post.username == user %}
+            <button id="editpost-{{post.id}}" onclick="edit_post(id)">edit post</button>
+        {% endif %}
+        <p>{{ post.creation_time }}</p>
+        <p id="likecount-{{post.id}}">{{ post.likes }} likes</p>
+        {% if user.is_authenticated %}
+            <button id="like-{{post.id}}" onclick="like_post(id)">
+            {% if user in post.liked_by.all %}
+                remove like
+            {% else %}
+                like
+            {% endif %}
+            </button>
+            <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
+            <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
+            <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+        <button id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</button>
+        <div id="comment-{{post.id}}" style="display: none;">
+        </div>
         </div>
     {% endfor %}
+    <ul class="pagination px-5" style="width: 100%;">
+        {% if all_posts.has_previous %}
+          <li class="page-item">
+            <a href="?page=1" class="page-link">&laquo; first</a>
+          </li>
+          <li class="page-item">
+            <a href="?page={{ all_posts.previous_page_number }}" class="page-link">previous</a>
+          </li>
+        {% endif %}
+        <li class="page-item">
+            <p class="page-link fw-bold">Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}</p>
+        </li>
+        {% if all_posts.has_next %}
+          <li class="page-item">
+            <a href="?page={{ all_posts.next_page_number }}" class="page-link">next</a>
+          </li>
+          <li class="page-item">
+            <a href="?page={{ all_posts.paginator.num_pages }}" class="page-link">last &raquo;</a>
+          </li>
+        {% endif %}
+      </ul>
+{% endblock %}
 
+{% block script %}
+  <script src="{% static 'network/index.js' %}"></script>
 {% endblock %}
