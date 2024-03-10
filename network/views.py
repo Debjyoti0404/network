@@ -42,7 +42,7 @@ def following_posts(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "network/index.html", {
-        "post_form": None,
+        "post_form": "following_pg",
         "all_posts": page_obj,
         "all_comments": Comments.objects.all()
     })
@@ -174,7 +174,8 @@ def profile_view(request, name):
     paginator = Paginator(all_posts, 2)
     pg_number = request.GET.get("page")
     pg_obj = paginator.get_page(pg_number)
-    return render(request, "network/profile.html", {
+    return render(request, "network/index.html", {
+        "post_form": "profile_pg",
         "user_profile": User.objects.get(username=name),
         "all_posts": pg_obj
     })
