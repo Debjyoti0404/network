@@ -35,16 +35,19 @@
   {% endif %}
   <hr>
   <h3 class="text-center">All posts </h3>
+  
   {% for post in all_posts %}
-    <div class="product-container container-fluid card my-3 border border-black" style="width: 30rem;">
-      <a class="text-decoration-none" href="{% url 'profile' post.username %}">
-        <h4 class="fw-bold">{{ post.username }}</h4>
-      </a>
+    <div class="product-container container-fluid card my-3 shadow-sm p-3" style="width: 90%;">
+      <div class="d-flex justify-content-between">
+        <a class="text-decoration-none" href="{% url 'profile' post.username %}">
+          <h4 class="fw-bold">{{ post.username }}</h4>
+        </a>
+        {% if post.username == user %}
+          <i class="bi bi-pencil-square" id="editpost-{{post.id}}" onclick="edit_post(id)"></i>
+        {% endif %}
+      </div>
       <h5 id="post-{{post.id}}">{{ post.post_content }}</h5>
-      {% if post.username == user %}
-        <button id="editpost-{{post.id}}" onclick="edit_post(id)">edit post</button>
-      {% endif %}
-      <h6 class="card-subtitle my-2 text-muted">{{ post.creation_time }}</h6>
+      <p class="card-subtitle mb-2 text-muted">{{ post.creation_time }}</p>
       <p id="likecount-{{post.id}}">{{ post.likes }} likes</p>
       {% if user.is_authenticated %}
         <button id="like-{{post.id}}" onclick="like_post(id)">
@@ -60,7 +63,7 @@
         </form>
       {% endif %}
       <button id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</button>
-      <div id="comment-{{post.id}}" style="display: none;">
+      <div class="ps-5" id="comment-{{post.id}}" style="display: none;">
       </div>
     </div>
   {% endfor %}
