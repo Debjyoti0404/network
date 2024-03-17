@@ -1,5 +1,13 @@
-@include media-breakpoint-up(sm) {
-    .navigation {
-      position: relative;
+.navigation-bar {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+    .navigation-bar {
+      position: fixed;
     }
   }
+
+input, textarea {
+  max-width: 100%;
+}

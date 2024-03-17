@@ -3,7 +3,7 @@
 
 {% block body %}
   {% if post_form == "profile_pg" %}
-    <div class="product-container container-fluid" style="width: 25rem;">
+    <div class="product-container container-fluid" style="width: 90%;">
       name: {{ user_profile.username }}
       <br>
       followers: {{ user_profile.follower_count }}
@@ -24,7 +24,7 @@
       {% endif %}
     </div>
   {% elif post_form != "profile_pg" and post_form != "following_pg" and user.is_authenticated %}
-    <div class="product-container container-fluid" style="width: 30rem;">
+    <div class="product-container container-fluid" style="width: 90%;">
       <h4>New Post</h4>
       <form id="new-post" action="{% url 'newpost' %}" method="post">
         {% csrf_token %}
@@ -34,10 +34,10 @@
     </div>
   {% endif %}
   <hr>
-  <h3 class="text-center">All posts </h3>
-  
-  {% for post in all_posts %}
-    <div class="product-container container-fluid card my-3 shadow-sm p-3" style="width: 90%;">
+  <h3>All posts </h3>
+  <div class="pt-3" style="background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);">
+    {% for post in all_posts %}
+    <div class="product-container rounded-4 container-fluid card my-5 shadow-sm p-3" style="width: 90%;">
       <div class="d-flex justify-content-between">
         <a class="text-decoration-none" href="{% url 'profile' post.username %}">
           <h4 class="fw-bold">{{ post.username }}</h4>
@@ -57,13 +57,16 @@
             like
           {% endif %}
         </button>
-        <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
-          <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
-          <input type="submit" value="Submit">
-        </form>
       {% endif %}
       <button id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</button>
-      <div class="ps-5" id="comment-{{post.id}}" style="display: none;">
+      <div id="comment-{{post.id}}" style="display: none;">
+        {% if user.is_authenticated %}
+          <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
+            <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
+            <input type="submit" value="Submit">
+          </form>
+        {% endif %}
+        <div class="ps-5" id="allcomments-{{post.id}}"></div>
       </div>
     </div>
   {% endfor %}
@@ -89,6 +92,7 @@
         </li>
       {% endif %}
     </ul>
+  </div>
   </div>
 {% endblock %}
 

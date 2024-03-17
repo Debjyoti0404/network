@@ -37,7 +37,7 @@ def following_posts(request):
         for post in Posts.objects.filter(username=account):
             all_posts.append(post)
             
-    paginator = Paginator(all_posts, 2)
+    paginator = Paginator(all_posts, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -76,7 +76,7 @@ def follow_request(request, name):
 
 def index(request):
     posts = Posts.objects.all().order_by('-creation_time')
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 3)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -171,7 +171,7 @@ def getcomment(request, post_id):
 
 def profile_view(request, name):
     all_posts = User.objects.get(username=name).all_posts.all().order_by('-creation_time')
-    paginator = Paginator(all_posts, 2)
+    paginator = Paginator(all_posts, 3)
     pg_number = request.GET.get("page")
     pg_obj = paginator.get_page(pg_number)
     return render(request, "network/index.html", {
