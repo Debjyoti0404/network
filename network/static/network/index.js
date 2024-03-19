@@ -83,11 +83,16 @@ function load_comments(id) {
             document.querySelector('#allcomments-' + post_id).innerHTML = '';
             result.forEach(comment => {
                 const element_div = document.createElement('div');
-                const author = document.createElement('h3');
+                const author = document.createElement('h5');
+                author.className = "fw-bold";
+                const profile_url = document.createElement('a');
+                profile_url.className = "text-decoration-none";
+                profile_url.setAttribute("href", "/profile/"+comment.author);
                 const comment_content = document.createElement('p');
                 author.innerHTML = comment.author;
+                profile_url.appendChild(author);
                 comment_content.innerHTML = comment.content;
-                element_div.appendChild(author);
+                element_div.appendChild(profile_url);
                 element_div.appendChild(comment_content);
                 target_element = document.querySelector('#allcomments-' + post_id);
                 target_element.append(element_div);
