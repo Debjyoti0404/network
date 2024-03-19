@@ -97,7 +97,7 @@ def like_post(request, post_id):
         target_post.save()
         target_post.refresh_from_db()
         return JsonResponse({
-            "btn_status": "like",
+            "btn_status": "1",
             "like_count": target_post.likes
             }, status=200)
     else:
@@ -106,7 +106,7 @@ def like_post(request, post_id):
         target_post.save()
         target_post.refresh_from_db()
         return JsonResponse({
-            "btn_status": "remove like",
+            "btn_status": "0",
             "like_count": target_post.likes
             }, status=200)
     
@@ -165,7 +165,7 @@ def postcomment(request, post_id):
 def getcomment(request, post_id):
     if request.method == "GET":
         targetted_post = Posts.objects.get(id=post_id)
-        all_comments = Comments.objects.filter(related_post=targetted_post)
+        all_comments = Comments.objects.filter(related_post=targetted_post).order_by('-id')
         return JsonResponse([comment.serialize() for comment in all_comments], safe=False)
 
 

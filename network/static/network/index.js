@@ -54,6 +54,8 @@ function post_comment(e, id) {
             console.log(result)
             document.querySelector('#commentcontent-' + post_id).value = '';
             load_comments(id);
+            document.querySelector('#comment-' + post_id).style.display = 'block';
+            document.querySelector('#loadcomment-' + post_id).innerHTML = 'hide comments';
         });
 }
 
@@ -68,8 +70,16 @@ function like_post(id) {
     })
         .then(response => response.json())
         .then(result => {
-            document.querySelector('#' + id).innerHTML = result.btn_status;
-            document.querySelector('#likecount-' + post_id).innerHTML = result.like_count + ' likes';
+            like_state = document.querySelector('#' + id).children[0];
+            if (result.btn_status==="0") {
+                like_state.className = "fa fa-heart mt-2";
+                like_state.style.color = "red";
+            }
+            else {
+                like_state.className = "fa fa-heart-o mt-2";
+                like_state.style.color = "black";
+            }
+            document.querySelector('#likecount-' + post_id).innerHTML = result.like_count;
         })
 }
 
@@ -98,13 +108,14 @@ function load_comments(id) {
                 target_element.append(element_div);
             });
         });
+    icon_state = document.querySelector('#loadcomment-' + post_id).children[0];
     if (document.querySelector('#comment-' + post_id).style.display == 'block') {
         document.querySelector('#comment-' + post_id).style.display = 'none';
-        document.querySelector('#loadcomment-' + post_id).innerHTML = 'show comments';
+        icon_state.className = "bi bi-chat-left-text";
     }
     else {
         document.querySelector('#comment-' + post_id).style.display = 'block';
-        document.querySelector('#loadcomment-' + post_id).innerHTML = 'hide comments';
+        icon_state.className = "bi bi-chat-left-text-fill";
     }
 }
 

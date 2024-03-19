@@ -48,18 +48,27 @@
       </div>
       <h5 id="post-{{post.id}}">{{ post.post_content }}</h5>
       <p class="card-subtitle mb-2 text-muted">{{ post.creation_time }}</p>
-      <p id="likecount-{{post.id}}">{{ post.likes }} likes</p>
-      {% if user.is_authenticated %}
-        <button id="like-{{post.id}}" onclick="like_post(id)">
+      <div class="d-flex">
+        <i class="fa fa-heart pt-1" style="font-size:20px;color:red"></i>
+        <p class="px-2" id="likecount-{{post.id}}">{{ post.likes }}</p>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-around">
+        {% if user.is_authenticated %}
+        <div id="like-{{post.id}}" onclick="like_post(id)">
           {% if user in post.liked_by.all %}
-            remove like
+            <i class="fa fa-heart mt-2" style="font-size:24px;color:red"></i>
           {% else %}
-            like
+            <i class="fa fa-heart-o mt-2" style="font-size:24px;color:black"></i>
           {% endif %}
-        </button>
-      {% endif %}
-      <button id="loadcomment-{{post.id}}" onclick="load_comments(id)">show comments</button>
+        </div>
+        {% endif %}
+        <div id="loadcomment-{{post.id}}" onclick="load_comments(id)">
+          <i class="bi bi-chat-left-text" style="font-size: 24px;"></i>
+        </div>
+      </div>
       <div id="comment-{{post.id}}" style="display: none;">
+        <hr>
         {% if user.is_authenticated %}
           <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
             <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
@@ -71,7 +80,7 @@
     </div>
   {% endfor %}
   <div class="product-container container-fluid" style="width: 25rem;">
-    <ul class="pagination px-5" style="width: 100%;">
+    <ul class="pagination px-5">
       {% if all_posts.has_previous %}
         <li class="page-item">
           <a href="?page=1" class="page-link">&laquo; first</a>
