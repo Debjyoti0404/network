@@ -14,43 +14,43 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-3 pt-5 d-flex justify-content-center">
+                <div class="col-md-2 pt-5 d-flex justify-content-center border-end-0 border-md-end">
                     <nav class="navigation-bar">        
-                        <ul class="navbar-nav d-flex flex-column">
+                        <ul class="navbar-nav d-flex flex-row flex-md-column">
                             <li class="nav-item">
-                                <a class="navbar-brand mx-2" href="#">Chirp</a>
+                                <a class="nav-link mx-2 fs-3 text-info fw-bold" href="{% url 'index' %}">Chirp</a>
                             </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
+                                <a class="nav-link fs-3" href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
                             </li>
                         {% endif %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                                <a class="nav-link fs-3" href="{% url 'index' %}">All Posts</a>
                             </li>
                         </ul>
                       </nav>
                 </div>
-                <div class="col-md-6 pt-5 px-0">
+                <div class="col-md-8 pt-5 px-0">
                     {% block body %}
                     {% endblock %}
                 </div>
-                <div class="col-md-3 pt-5 d-flex justify-content-center">
+                <div class="col-md-2 pt-5 d-flex justify-content-center border-start border-start-0 border-md-start sticky-bottom bg-white sticky-md-none">
                     <nav class="navigation-bar">        
-                        <ul class="navbar-nav d-flex flex-column">
+                        <ul class="navbar-nav d-flex flex-row flex-md-column justify-sm-content-between">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'following' %}">Following</a>
+                                <a class="nav-link fs-3" href="{% url 'following' %}">Following</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                                <a class="nav-link fs-3" href="{% url 'logout' %}">Log Out</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                                <a class="nav-link fs-3" href="{% url 'login' %}">Log In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                                <a class="nav-link fs-3" href="{% url 'register' %}">Register</a>
                             </li>
                         {% endif %}
                         </ul>

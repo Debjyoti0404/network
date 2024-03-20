@@ -4,37 +4,37 @@
 {% block body %}
   {% if post_form == "profile_pg" %}
     <div class="product-container container-fluid" style="width: 90%;">
-      name: {{ user_profile.username }}
-      <br>
-      followers: {{ user_profile.follower_count }}
-      <br>
-      following: {{ user_profile.following_count }}
-      <br>
+      <h2 class="fw-bold">Name: {{ user_profile.username }}</h2>
+      <h2 class="fw-bold">Followers: {{ user_profile.follower_count }}</h2>
+      <h2 class="fw-bold">Following: {{ user_profile.following_count }}</h2>
       {% if user.is_authenticated and user.username != user_profile.username %}
           <a href="{% url 'followrequest' user_profile.username %}">
-              <button>
-                  {% if user in user_profile.follower_list.all %}
-                      Unfollow
-                  {% else %}
-                      Follow
-                  {% endif %}
-              </button>
+            {% if user in user_profile.follower_list.all %}
+              <button class="btn btn-danger">Unfollow</button>
+            {% else %}
+              <button class="btn btn-primary">Follow</button>
+            {% endif %}
           </a>
           <br>
       {% endif %}
     </div>
   {% elif post_form != "profile_pg" and post_form != "following_pg" and user.is_authenticated %}
     <div class="product-container container-fluid" style="width: 90%;">
-      <h4>New Post</h4>
+      <h3 class="fw-bold">New Post</h3>
+      <hr>
       <form id="new-post" action="{% url 'newpost' %}" method="post">
         {% csrf_token %}
         {{ post_form }}
-        <input type="submit" value="Submit">
+        <div class="d-flex justify-content-end">
+          <input type="submit" class="btn btn-primary rounded-4" value="Post">
+        </div>
       </form>
     </div>
   {% endif %}
   <hr>
-  <h3 class="text-center">All posts </h3>
+  <div class="sticky-top bg-white mb-3">
+    <h3 class="text-center fw-semibold">All posts </h3>
+  </div>
   <div class="pt-3" style="background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);">
     {% for post in all_posts %}
     <div class="product-container rounded-4 container-fluid card my-5 shadow-sm p-3" style="width: 90%;">
@@ -55,24 +55,28 @@
       <hr>
       <div class="d-flex justify-content-around">
         {% if user.is_authenticated %}
-        <div id="like-{{post.id}}" onclick="like_post(id)">
+        <div id="like-{{post.id}}" class="d-flex" onclick="like_post(id)">
           {% if user in post.liked_by.all %}
             <i class="fa fa-heart mt-2" style="font-size:24px;color:red"></i>
           {% else %}
             <i class="fa fa-heart-o mt-2" style="font-size:24px;color:black"></i>
           {% endif %}
+          <p class="ps-2" style="font-size: 24px;">Like</p>
         </div>
         {% endif %}
-        <div id="loadcomment-{{post.id}}" onclick="load_comments(id)">
+        <div id="loadcomment-{{post.id}}" class="d-flex" onclick="load_comments(id)">
           <i class="bi bi-chat-left-text" style="font-size: 24px;"></i>
+          <p class="ps-2" style="font-size: 24px;">Comment</p>
         </div>
       </div>
       <div id="comment-{{post.id}}" style="display: none;">
         <hr>
         {% if user.is_authenticated %}
           <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
-            <input type="text" id="commentcontent-{{post.id}}" placeholder="comment.." required>
-            <input type="submit" value="Submit">
+            <input type="text" id="commentcontent-{{post.id}}" style="width: 100%;border: none; border-bottom: solid;" placeholder="comment.." required>
+            <div class="d-flex justify-content-end">
+              <input type="submit" class="mt-2 btn btn-primary rounded-4" value="Submit">
+            </div>
           </form>
         {% endif %}
         <div class="ps-5" id="allcomments-{{post.id}}"></div>

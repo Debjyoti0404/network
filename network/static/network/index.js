@@ -4,9 +4,11 @@ function edit_post(id) {
     const edit_form = document.createElement('form');
     const textarea = document.createElement('textarea');
     textarea.setAttribute("rows", "4");
+    textarea.setAttribute("style", "width:100%;");
     textarea.innerHTML = post_content.innerHTML;
     const submit = document.createElement('input');
     submit.setAttribute("type", "submit");
+    submit.className = "btn btn-primary rounded-4";
     edit_form.appendChild(textarea);
     edit_form.appendChild(submit);
     post_content.innerHTML = '';
@@ -55,7 +57,7 @@ function post_comment(e, id) {
             document.querySelector('#commentcontent-' + post_id).value = '';
             load_comments(id);
             document.querySelector('#comment-' + post_id).style.display = 'block';
-            document.querySelector('#loadcomment-' + post_id).innerHTML = 'hide comments';
+            document.querySelector('#loadcomment-' + post_id).children[0].className = "bi bi-chat-left-text-fill";
         });
 }
 
