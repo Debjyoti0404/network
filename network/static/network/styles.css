@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.comment-form:focus {
+  outline: none;
+}
+
 @media (min-width: 768px) {
     .navigation-bar {
       position: fixed;

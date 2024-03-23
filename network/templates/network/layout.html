@@ -14,18 +14,18 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-2 pt-5 d-flex justify-content-center border-end-0 border-md-end">
+                <div class="col-md-2 pt-5 d-flex justify-content-center border-end bg-white sticky-top">
                     <nav class="navigation-bar">        
                         <ul class="navbar-nav d-flex flex-row flex-md-column">
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link mx-2 fs-3 text-info fw-bold" href="{% url 'index' %}">Chirp</a>
                             </li>
                         {% if user.is_authenticated %}
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
                             </li>
                         {% endif %}
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'index' %}">All Posts</a>
                             </li>
                         </ul>
@@ -35,21 +35,21 @@
                     {% block body %}
                     {% endblock %}
                 </div>
-                <div class="col-md-2 pt-5 d-flex justify-content-center border-start border-start-0 border-md-start sticky-bottom bg-white sticky-md-none">
+                <div class="col-md-2 pt-5 d-flex justify-content-center border-start sticky-bottom bg-white sticky-md-none">
                     <nav class="navigation-bar">        
                         <ul class="navbar-nav d-flex flex-row flex-md-column justify-sm-content-between">
                         {% if user.is_authenticated %}
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'following' %}">Following</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'logout' %}">Log Out</a>
                             </li>
                         {% else %}
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'login' %}">Log In</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item px-1">
                                 <a class="nav-link fs-3" href="{% url 'register' %}">Register</a>
                             </li>
                         {% endif %}

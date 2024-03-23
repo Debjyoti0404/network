@@ -26,13 +26,13 @@
         {% csrf_token %}
         {{ post_form }}
         <div class="d-flex justify-content-end">
-          <input type="submit" class="btn btn-primary rounded-4" value="Post">
+          <input type="submit" class="btn btn-primary my-2 rounded-4" value="Post">
         </div>
       </form>
     </div>
   {% endif %}
   <hr>
-  <div class="sticky-top bg-white mb-3">
+  <div class="sticky-md-top bg-white mb-3">
     <h3 class="text-center fw-semibold">All posts </h3>
   </div>
   <div class="pt-3" style="background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);">
@@ -73,7 +73,7 @@
         <hr>
         {% if user.is_authenticated %}
           <form id="postcomment-{{post.id}}" onsubmit="post_comment(event, id)">
-            <input type="text" id="commentcontent-{{post.id}}" style="width: 100%;border: none; border-bottom: solid;" placeholder="comment.." required>
+            <input type="text" class="comment-form" id="commentcontent-{{post.id}}" style="width: 100%;border: none; border-bottom: solid;" placeholder="comment.." required>
             <div class="d-flex justify-content-end">
               <input type="submit" class="mt-2 btn btn-primary rounded-4" value="Submit">
             </div>
