@@ -26,7 +26,7 @@ SECRET_KEY = '13kl@xtukpwe&xj2xoysxe9_6=tf@f8ewxer5n&ifnd46+6$%8'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ["https://chirp-kj1i.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["https://chirp-kj1i.onrender.com", "https://chirp.dsen.duckdns.org"]
 
 
 # Application definition
