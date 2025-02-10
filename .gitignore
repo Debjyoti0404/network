@@ -1,0 +1,79 @@
+.network_env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+*.virtualenv/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Migrations
+**/migrations/*
+
+# Media and static files
+/media/
+/staticfiles/
+
+# Secrets and configurations
+*.env
+.env.*
+
+# IDE and editor files
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Testing output
+.coverage
+*.coverage
+htmlcov/
+
+# Celery stuff
+celerybeat-schedule
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# pip files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pytest
+.cache/
+
+# MyPy
+.mypy_cache/
+
+# Bandit
+.bandit/
+
+# Coverage
+.coverage
+.coverage.*
+
+# Build
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
