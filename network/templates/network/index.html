@@ -39,7 +39,8 @@
     {% for post in all_posts %}
     <div class="product-container rounded-4 container-fluid card my-5 shadow-sm p-3" style="width: 90%;">
       <div class="d-flex justify-content-between">
-        <a class="text-decoration-none" href="{% url 'profile' post.username %}">
+        <a class="d-flex gap-1" href="{% url 'profile' post.username %}" style="text-decoration: none;">
+          <i class="fa-regular fa-circle-user mt-1" style="font-size: 22px;"></i>
           <h4 class="fw-bold">{{ post.username }}</h4>
         </a>
         {% if post.username == user %}
@@ -47,21 +48,22 @@
         {% endif %}
       </div>
       <h5 id="post-{{post.id}}">{{ post.post_content }}</h5>
-      <p class="card-subtitle mb-2 text-muted">{{ post.creation_time }}</p>
+      <p class="card-subtitle mb-2 text-muted" style="font-size: small;">{{ post.creation_time }}</p>
       <div class="d-flex">
-        <i class="fa fa-heart pt-1" style="font-size:20px;color:red"></i>
-        <p class="px-2" id="likecount-{{post.id}}">{{ post.likes }}</p>
+        <i class="fa-solid fa-heart mt-1" style="color: red;
+        font-size: 20px;"></i>
+        <p class="px-2 " id="likecount-{{post.id}}" style="font-size: 18px;">{{ post.likes }}</p>
       </div>
       <hr>
       <div class="d-flex justify-content-around">
         {% if user.is_authenticated %}
         <div id="like-{{post.id}}" class="d-flex" onclick="like_post(id)">
           {% if user in post.liked_by.all %}
-            <i class="fa fa-heart mt-2" style="font-size:24px;color:red"></i>
+            <i class="fa-solid fa-heart mt-2" style="font-size:24px;color:red"></i>
           {% else %}
-            <i class="fa fa-heart-o mt-2" style="font-size:24px;color:black"></i>
+            <i class="fa-regular fa-heart mt-2" style="font-size:24px;color:black"></i>
           {% endif %}
-          <p class="ps-2" style="font-size: 24px;">Like</p>
+          <p class="ps-2" style="font-size:24px;">Like</p>
         </div>
         {% endif %}
         <div id="loadcomment-{{post.id}}" class="d-flex" onclick="load_comments(id)">

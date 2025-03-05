@@ -74,11 +74,11 @@ function like_post(id) {
         .then(result => {
             like_state = document.querySelector('#' + id).children[0];
             if (result.btn_status==="0") {
-                like_state.className = "fa fa-heart mt-2";
+                like_state.className = "fa-solid fa-heart mt-2";
                 like_state.style.color = "red";
             }
             else {
-                like_state.className = "fa fa-heart-o mt-2";
+                like_state.className = "fa-regular fa-heart mt-2";
                 like_state.style.color = "black";
             }
             document.querySelector('#likecount-' + post_id).innerHTML = result.like_count;
